@@ -1,6 +1,6 @@
 # ReviewLens AI
 
-An AI-powered Amazon product review analysis platform. Paste a product ASIN, scrape its reviews via Bright Data, then explore them through a RAG-based chat interface — ask natural-language questions and get answers grounded in real customer feedback.
+An AI-powered Amazon product review analysis platform. Paste a product ASIN, scrape its reviews, then explore them through a RAG-based chat interface — ask natural-language questions and get answers grounded in real customer feedback.
 
 Works fully in **mock mode** with no API keys required (synthetic data is used instead of live scraping and real AI responses).
 
