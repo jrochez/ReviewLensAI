@@ -49,7 +49,7 @@ foreach ($line in (Get-Content ".env")) {
 
 # ── Create Secrets in Secret Manager ─────────────────────────────────────────
 Write-Step "Creating secrets in Secret Manager"
-foreach ($secretName in @("OPENAI_API_KEY", "SECRET_KEY", "BRIGHTDATA_API_KEY")) {
+foreach ($secretName in @("OPENAI_API_KEY", "SECRET_KEY", "BRIGHTDATA_API_KEY", "BRIGHTDATA_DATASET_ID")) {
     $null = gcloud secrets create $secretName `
         --replication-policy=automatic `
         --project=$PROJECT 2>&1
@@ -111,7 +111,7 @@ gcloud run deploy $BACKEND_SVC `
     --cpu=1 `
     --min-instances=0 `
     --max-instances=3 `
-    --set-secrets="ADMIN_EMAIL=ADMIN_EMAIL:latest,ADMIN_PASSWORD=ADMIN_PASSWORD:latest,OPENAI_API_KEY=OPENAI_API_KEY:latest,SECRET_KEY=SECRET_KEY:latest,BRIGHTDATA_API_KEY=BRIGHTDATA_API_KEY:latest" `
+    --set-secrets="ADMIN_EMAIL=ADMIN_EMAIL:latest,ADMIN_PASSWORD=ADMIN_PASSWORD:latest,OPENAI_API_KEY=OPENAI_API_KEY:latest,SECRET_KEY=SECRET_KEY:latest,BRIGHTDATA_API_KEY=BRIGHTDATA_API_KEY:latest,BRIGHTDATA_DATASET_ID=BRIGHTDATA_DATASET_ID:latest" `
     --set-env-vars="DATABASE_URL=sqlite+aiosqlite:////app/data/reviewlens.db,CHROMA_PERSIST_DIR=/app/data/chromadb,INJECTION_BLOCKLIST_PATH=/app/config/injection_blocklist.txt" `
     --add-volume="name=data,type=cloud-storage,bucket=$BUCKET" `
     --add-volume-mount="volume=data,mount-path=/app/data"
