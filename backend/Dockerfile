@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends gcc g++ && rm -
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN useradd -r -u 1001 -s /bin/false appuser
+RUN useradd -r -u 1000 -s /bin/false appuser
 
 COPY . .
 
