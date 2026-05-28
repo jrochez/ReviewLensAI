@@ -1,0 +1,49 @@
+﻿# -- Environment --------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+# .env.example is intentionally NOT ignored
+
+# -- Logs ---------------------------------------------------------------------
+*.log
+logs/
+
+# -- Next.js ------------------------------------------------------------------
+frontend/.next/
+frontend/out/
+frontend/.swc/
+
+# -- Node / npm ---------------------------------------------------------------
+frontend/node_modules/
+frontend/.npm
+*.tsbuildinfo
+
+# -- Python -------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# -- Database / runtime data --------------------------------------------------
+*.db
+*.sqlite
+*.sqlite3
+backend/data/qa_audit.log
+
+# -- OS artefacts -------------------------------------------------------------
+.DS_Store
+Thumbs.db
+nul
+
+# -- Editors ------------------------------------------------------------------
+.idea/
+*.swp
+*.swo
