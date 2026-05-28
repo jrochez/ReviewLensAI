@@ -1,3 +1,12 @@
+# python:3.10-slim-bullseye ships sqlite3 3.34.1; chromadb requires >= 3.35.0.
+# Swap in the bundled newer version before any chromadb import occurs.
+try:
+    import pysqlite3 as _pysqlite3
+    import sys as _sys
+    _sys.modules["sqlite3"] = _pysqlite3
+except ImportError:
+    pass
+
 import logging
 import os
 from contextlib import asynccontextmanager
