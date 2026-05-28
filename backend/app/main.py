@@ -1,14 +1,16 @@
 import logging
+import os
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 
+import bcrypt as _bcrypt
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import select
 
 from app.config import settings
-from app.db.models import Dataset
+from app.db.models import Dataset, User
 from app.db.session import AsyncSessionLocal, Base, engine
 from app.routers import auth, chat, datasets, reviews, scrape
 from app.security import blocklist
@@ -24,6 +26,17 @@ async def _startup():
     blocklist.reload()
 
     async with AsyncSessionLocal() as db:
+        # Seed initial admin user if none exists and env vars are set
+        admin_email = os.environ.get("INITIAL_ADMIN_EMAIL", "").strip().lower()
+        admin_password = os.environ.get("INITIAL_ADMIN_PASSWORD", "").strip()
+        if admin_email and admin_password:
+            existing = await db.execute(select(User).where(User.email == admin_email))
+            if existing.scalar_one_or_none() is None:
+                hashed = _bcrypt.hashpw(admin_password.encode(), _bcrypt.gensalt()).decode()
+                db.add(User(email=admin_email, hashed_password=hashed))
+                await db.commit()
+                logger.info("Seeded initial admin user: %s", admin_email)
+
         # Reset any stuck scraping datasets from a previous crash
         result = await db.execute(select(Dataset).where(Dataset.status == "scraping"))
         stuck = result.scalars().all()
@@ -45,7 +58,13 @@ app = FastAPI(title="ReviewLens AI API", version="1.0.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://localhost:3000", "http://frontend:3000"],
+    allow_origins=[
+        "http://localhost:8080",
+        "http://localhost:3000",
+        "http://frontend:3000",
+        "https://reviewlens.rochez.net",
+        "https://reviewlens-frontend-963929737774.us-central1.run.app",
+    ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],

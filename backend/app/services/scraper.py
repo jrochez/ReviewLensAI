@@ -138,6 +138,6 @@ class MockScraperAdapter(ScraperProvider):
 
 
 def get_scraper() -> ScraperProvider:
-    if settings.BRIGHTDATA_API_KEY:
+    if settings.BRIGHTDATA_API_KEY and settings.BRIGHTDATA_DATASET_ID:
         return BrightDataAdapter()
     return MockScraperAdapter()
