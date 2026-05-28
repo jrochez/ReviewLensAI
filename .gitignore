@@ -37,6 +37,7 @@ env/
 *.sqlite
 *.sqlite3
 backend/data/qa_audit.log
+backend/data/chromadb/
 
 # -- OS artifacts -------------------------------------------------------------
 .DS_Store
